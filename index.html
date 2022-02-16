@@ -4,9 +4,7 @@
     <meta charset="utf-8">
     <title>Web3 dApp</title>
     <!-- Import Etherjs source -->
-    <script charset="utf-8"
-        src="https://cdn.ethers.io/scripts/ethers-v4.min.js"
-        type="text/javascript">
+    <script src="https://cdn.ethers.io/scripts/ethers-v4.min.js">
  </script>
  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
    crossorigin="anonymous"></script>
@@ -24,17 +22,19 @@
       <button onclick="setMood()">Set Mood</button>
     </div>
     <script>
+    
+    console.log(window.ethereum);
     //Enable Ethereum
     window.ethereum.enable();
     
     //Define ether(ropsten) as provider
     const provider = new ethers.providers.Web3Provider(
-      web3currentProvider,
+      window.ethereum,
       "ropsten"
     );
     
     //Import contract that was made above
-    const MoodContractAddress = "0xd9145CCE52D386f254917e481eB44e9943F39138";
+    const MoodContractAddress = "contract address";
     const MoodContractABI = [
 	{
 		"constant": true,
