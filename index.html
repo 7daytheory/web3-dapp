@@ -2,7 +2,14 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Web3 dApp</title>
+    <!-- Import Etherjs source -->
+    <script charset="utf-8"
+        src="https://cdn.ethers.io/scripts/ethers-v4.min.js"
+        type="text/javascript">
+ </script>
+ <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+   crossorigin="anonymous"></script>
   </head>
   <body>
     <h1>Ethereum dApp</h1>
@@ -12,28 +19,77 @@
     <input type="text" id="mood">
     
     <div>
-      <button onclick="getmood()">Get Mood</button>
+      <button onclick="getMood()">Get Mood</button>
       
-      <button onclick="setmood()">Set Mood</button>
+      <button onclick="setMood()">Set Mood</button>
     </div>
     <script>
-    /* Creating contract code on remix
-    // SPDX-License-Identifier: MIT
-    pragma solidity ^0.8.1;
+    //Enable Ethereum
+    window.ethereum.enable();
+    
+    //Define ether(ropsten) as provider
+    const provider = new ethers.providers.Web3Provider(
+      web3currentProvider,
+      "ropsten"
+    );
+    
+    //Import contract that was made above
+    const MoodContractAddress = "0xd9145CCE52D386f254917e481eB44e9943F39138";
+    const MoodContractABI = [
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getMood",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_mood",
+				"type": "string"
+			}
+		],
+		"name": "setMood",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+    let MoodContract;
+    let signer;
+    
+    provider.listAccounts().then(function (accounts) {
+      signer = provider.getSigner(accounts[0]);
+      MoodContract = new ethers.Contract(
+        MoodContractAddress,
+        MoodContractABI,
+        signer
+      );
+    });
+    
+  async function getMood() {
+  getMoodPromise = MoodContract.getMood();
+  var Mood = await getMoodPromise;
+  console.log(Mood);
+}
 
-    contract MoodDiary {
-      string mood;
-
-    function setMood(string memory _mood) public{
-       mood = _mood;
-    }
-
-    //Read the mood from the smart contract
-    function getMood() public view returns(string memory){
-       return mood;
-      }
-    }
-    */
+  async function setMood() {
+    let mood = document.getElementById("mood").value;
+    setMoodPromise = MoodContract.setMood(mood);
+    await setMoodPromise;
+  }
     </script>
   </body>
 </html>
